@@ -3,27 +3,29 @@
 
 const READY_STATE = ['UNSENT', 'OPENED', 'HEADERS_RECEIVED', 'LOADING', 'DONE'];
 
-const ajax = (url, cat) => {
+const ajax = (url, cat = () => {}) => {
     const xhttp = new XMLHttpRequest();
-    xhttp.addEventListener('load', cat);
+    xhttp.addEventListener('load', () => cat(xhttp.responseText));
 
     xhttp.addEventListener('readystatechange', () => {
-        console.log('ready state: ', READY_STATE[xhttp.readyState]);
+        console.log('ready state: ', xhttp.readyState, READY_STATE[xhttp.readyState]);
         console.log('status: ', xhttp.status);
         console.log('text: ', xhttp.responseText);
         console.log('---------------------');
     });
 
-    xhttp.open('GET', url, true);
+    xhttp.open('GET', url);
     xhttp.send();
 }
 
-const handleJSONFunc = ev => {
-
+const handleJSONFunc = objStr => {
+    console.log('handleJSONFunc');
+    const obj = JSON.parse(objStr);
+    console.log(obj);
 }
 
-// ajax('hello.txt');
-// ajax('data.json');
+ajax('hello.txt');
+ajax('data.json', handleJSONFunc);
 
 one = 1.1;
 
